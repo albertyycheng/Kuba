@@ -7,8 +7,11 @@ import pygame, sys
 
 pygame.font.init()
 message_font = pygame.font.SysFont('Arial', 15)
+<<<<<<< HEAD
 instruction_font = pygame.font.SysFont('Arial', 20)
 pygame.font.Font.set_underline(instruction_font, True)
+=======
+>>>>>>> 837f5771f84f92c62f0ddc980938c84dc94c3d9f
 
 
 class PyGameFeatures:
@@ -22,6 +25,7 @@ class PyGameFeatures:
     CIRCLE_WIDTH = 60
     BORDER_WIDTH = 5
     CIRCLE_RADIUS = 30
+<<<<<<< HEAD
     BOARD_SIDE_LENGTH = 700
     BOARD_START_Y = 50
     BOARD_START_X = 100
@@ -29,18 +33,27 @@ class PyGameFeatures:
     SCREEN_WIDTH = 900
 
     def __init__(self, my_board, player_1, player_2):
+=======
+
+    def __init__(self):
+>>>>>>> 837f5771f84f92c62f0ddc980938c84dc94c3d9f
         """
         initializes pygame instance, display,
         """
         # color constants
 
         pygame.init()
+<<<<<<< HEAD
         self.screen = pygame.display.set_mode((self.SCREEN_WIDTH, self.SCREEN_HEIGHT))
+=======
+        self.screen = pygame.display.set_mode((900, 1000))
+>>>>>>> 837f5771f84f92c62f0ddc980938c84dc94c3d9f
         pygame.display.set_caption("Albert's Kuba Game")
         self.screen.fill(self.BEIGE)
 
         # draw grid lines
         for i in range(0, 8):
+<<<<<<< HEAD
             pygame.draw.line(self.screen, self.BLACK, ((i + 1) * 100, self.BOARD_START_Y),
                              ((i + 1) * 100, 700 + self.BOARD_START_Y), 2)
             pygame.draw.line(self.screen, self.BLACK, (self.BOARD_START_X, i * 100 + self.BOARD_START_Y),
@@ -105,6 +118,35 @@ class PyGameFeatures:
 
 
 
+=======
+            pygame.draw.line(self.screen, self.BLACK, ((i + 1) * 100, 0), ((i + 1) * 100, 700), 2)
+            pygame.draw.line(self.screen, self.BLACK, (100, i * 100), (800, i * 100), 2)
+            grid_num = message_font.render(str(i), False, (0, 0, 0))
+            if i < 7:
+                self.screen.blit(grid_num, (75, i * 100 + 45))
+                self.screen.blit(grid_num, ((i + 1) * 100 + 45, 710))
+
+
+
+    def update_interface(self, my_board):
+        """
+        uses get_board method from KubaGame to braw game interface on pygame screen
+        """
+        for row_num, row in enumerate(my_board):
+            for col_num, marble in enumerate(row):
+                if marble == 'W':
+                    pygame.draw.circle(self.screen, self.WHITE, (int((col_num + 1) * 100 + 50), int(row_num * 100 + 50)), self.CIRCLE_RADIUS, self.CIRCLE_WIDTH)
+                    pygame.draw.circle(self.screen, self.BLACK, (int((col_num + 1) * 100 + 50), int(row_num * 100 + 50)),
+                                       self.CIRCLE_RADIUS, self.BORDER_WIDTH)
+                elif marble == 'B':
+                    pygame.draw.circle(self.screen, self.BLACK, (int((col_num + 1) * 100 + 50), int(row_num * 100 + 50)), self.CIRCLE_RADIUS, self.CIRCLE_WIDTH)
+                    pygame.draw.circle(self.screen, self.BLACK, (int((col_num + 1) * 100 + 50), int(row_num * 100 + 50)),
+                                       self.CIRCLE_RADIUS, self.BORDER_WIDTH)
+                elif marble == 'R':
+                    pygame.draw.circle(self.screen, self.RED, (int((col_num + 1) * 100 + 50), int(row_num * 100 + 50)), self.CIRCLE_RADIUS, self.CIRCLE_WIDTH)
+                    pygame.draw.circle(self.screen, self.BLACK, (int((col_num + 1) * 100 + 50), int(row_num * 100 + 50)),
+                                       self.CIRCLE_RADIUS, self.BORDER_WIDTH)
+>>>>>>> 837f5771f84f92c62f0ddc980938c84dc94c3d9f
 
 class KubaGame:
     """
@@ -529,11 +571,21 @@ class Player:
 
 if __name__ == "__main__":
 
+<<<<<<< HEAD
     player_1 = input("Please enter the name and marble color of the first player as a tuple. (Ex. ('PlayerA', 'W')): ")
     player_1_as_tuple = tuple(player_1.split(','))
     player_2 = input("Please enter the name and marble color of the second player as a tuple. (Ex. ('PlayerB', 'B')): ")
     player_2_as_tuple = tuple(player_2.split(','))
     my_game = KubaGame(player_1_as_tuple, player_2_as_tuple)
+=======
+    # persist screen unless user quits
+    my_pygame = PyGameFeatures()
+    # player_1 = input("Please enter the name and marble color of the first player as a tuple. (Ex. ('PlayerA', 'W')): ")
+    # player_2 = input("Please enter the name and marble color of the second player as a tuple. (Ex. ('PlayerB', 'B')): ")
+    player_1 = 'Albert', 'B'
+    player_2 = 'Nicole', 'W'
+    my_game = KubaGame(player_1, player_2)
+>>>>>>> 837f5771f84f92c62f0ddc980938c84dc94c3d9f
 
     while my_game.get_winner() is None:
         my_pygame = PyGameFeatures(my_game.get_board(), my_game.get_player_from_name(player_1_as_tuple[0]),
@@ -543,6 +595,7 @@ if __name__ == "__main__":
             if event.type == pygame.QUIT:
                 sys.exit()
 
+<<<<<<< HEAD
         pygame.display.update()
 
         if my_game.get_current_turn() is None:
@@ -560,5 +613,13 @@ if __name__ == "__main__":
             my_game.make_move(my_game.get_current_turn(), coords_as_tuple, direction)
 
 
+=======
+
+        my_pygame.update_interface(my_game.get_board())
+        intro_message = message_font.render("Welcome to Albert's Kuba Game. Please exit this screen to start play.", False, (0, 0, 0))
+        my_pygame.screen.blit(intro_message, (100, 730))
+
+
+>>>>>>> 837f5771f84f92c62f0ddc980938c84dc94c3d9f
 
 

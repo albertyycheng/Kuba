@@ -6,67 +6,61 @@
 import pygame, sys
 
 pygame.font.init()
-message_font = pygame.font.SysFont('Arial', 30)
+message_font = pygame.font.SysFont('Arial', 15)
 
 
 class PyGameFeatures:
     """
     Represents Kuba game interface using Pygame module
     """
+    BLACK = (0, 0, 0)
+    WHITE = (255, 255, 255)
+    RED = (255, 0, 0)
+    BEIGE = (244, 226, 198)
+    CIRCLE_WIDTH = 60
+    BORDER_WIDTH = 5
+    CIRCLE_RADIUS = 30
 
     def __init__(self):
         """
         initializes pygame instance, display,
         """
         # color constants
-        BLACK = (0, 0, 0)
-        WHITE = (255, 255, 255)
-        RED = (255, 0, 0)
-        BEIGE = (244, 226, 198)
 
         pygame.init()
-        self.screen = pygame.display.set_mode((700, 700))
+        self.screen = pygame.display.set_mode((900, 1000))
         pygame.display.set_caption("Albert's Kuba Game")
-        self.screen.fill(BEIGE)
+        self.screen.fill(self.BEIGE)
 
         # draw grid lines
         for i in range(0, 8):
-            pygame.draw.line(self.screen, BLACK, (i * 100, 0), (i * 100, 700), 2)
-            pygame.draw.line(self.screen, BLACK, (0, i * 100), (700, i * 100), 2)
+            pygame.draw.line(self.screen, self.BLACK, ((i + 1) * 100, 0), ((i + 1) * 100, 700), 2)
+            pygame.draw.line(self.screen, self.BLACK, (100, i * 100), (800, i * 100), 2)
+            grid_num = message_font.render(str(i), False, (0, 0, 0))
+            if i < 7:
+                self.screen.blit(grid_num, (75, i * 100 + 45))
+                self.screen.blit(grid_num, ((i + 1) * 100 + 45, 710))
 
-    def click_handle(self, click_pos):
+
+
+    def update_interface(self, my_board):
         """
-        checks to see if there is a first click and direction click, then stores clicks and figures out direction
+        uses get_board method from KubaGame to braw game interface on pygame screen
         """
-        direction = 0
-        too_many_clicks_message = message_font.render(
-            'You made more than two clicks. Remember, first click the marble you would like to move, then click the adjacent cell that you want to move the marble into',
-            False, (0, 0, 0))
-
-        clicks_queue = []
-        clicks_queue.append(click_pos)
-        if len(clicks_queue) == 3:
-            my_pygame.screen.blit(too_many_clicks_message, (350, 350))
-            return False
-
-        first_click = clicks_queue.pop(0)
-        first_clicked_row = int(first_click[1] // 700)
-        first_clicked_col = int(first_click[0] // 700)
-
-        second_click = clicks_queue.pop(0)
-        second_clicked_row = int(second_click[1] // 700)
-        second_clicked_col = int(second_click[0] // 700)
-        if second_clicked_col > first_clicked_col:
-            direction = 'R'
-        elif second_clicked_col < first_clicked_col:
-            direction = 'L'
-        elif second_clicked_row > first_clicked_row:
-            direction = 'B'
-        elif second_clicked_row < first_clicked_row:
-            direction = 'F'
-
-        return (first_clicked_row, first_clicked_col), direction
-
+        for row_num, row in enumerate(my_board):
+            for col_num, marble in enumerate(row):
+                if marble == 'W':
+                    pygame.draw.circle(self.screen, self.WHITE, (int((col_num + 1) * 100 + 50), int(row_num * 100 + 50)), self.CIRCLE_RADIUS, self.CIRCLE_WIDTH)
+                    pygame.draw.circle(self.screen, self.BLACK, (int((col_num + 1) * 100 + 50), int(row_num * 100 + 50)),
+                                       self.CIRCLE_RADIUS, self.BORDER_WIDTH)
+                elif marble == 'B':
+                    pygame.draw.circle(self.screen, self.BLACK, (int((col_num + 1) * 100 + 50), int(row_num * 100 + 50)), self.CIRCLE_RADIUS, self.CIRCLE_WIDTH)
+                    pygame.draw.circle(self.screen, self.BLACK, (int((col_num + 1) * 100 + 50), int(row_num * 100 + 50)),
+                                       self.CIRCLE_RADIUS, self.BORDER_WIDTH)
+                elif marble == 'R':
+                    pygame.draw.circle(self.screen, self.RED, (int((col_num + 1) * 100 + 50), int(row_num * 100 + 50)), self.CIRCLE_RADIUS, self.CIRCLE_WIDTH)
+                    pygame.draw.circle(self.screen, self.BLACK, (int((col_num + 1) * 100 + 50), int(row_num * 100 + 50)),
+                                       self.CIRCLE_RADIUS, self.BORDER_WIDTH)
 
 class KubaGame:
     """
@@ -98,6 +92,12 @@ class KubaGame:
         self._last_slot_moved = None
         self._prev_direction = None
 
+    def get_board(self):
+        """
+        returns board as a list of lists
+        """
+        return self._board
+
     def get_current_turn(self):
         """
         gets player name of whoever has the current turn.
@@ -115,11 +115,6 @@ class KubaGame:
         for player in self._players:
             if player.get_playername() == playername:
                 return player
-
-    def pygame_make_move(self, playername, direction):
-        """
-        grabs coordinates via mouse click and calls og make_move method.
-        """
 
     def make_move(self, playername, coordinates, direction):
         """
@@ -492,8 +487,10 @@ if __name__ == "__main__":
 
     # persist screen unless user quits
     my_pygame = PyGameFeatures()
-    player_1 = input("Please enter the name and marble color of the first player as a tuple. (Ex. ('PlayerA', 'W')): ")
-    player_2 = input("Please enter the name and marble color of the second player as a tuple. (Ex. ('PlayerB', 'B')): ")
+    # player_1 = input("Please enter the name and marble color of the first player as a tuple. (Ex. ('PlayerA', 'W')): ")
+    # player_2 = input("Please enter the name and marble color of the second player as a tuple. (Ex. ('PlayerB', 'B')): ")
+    player_1 = 'Albert', 'B'
+    player_2 = 'Nicole', 'W'
     my_game = KubaGame(player_1, player_2)
 
     while True:
@@ -502,13 +499,12 @@ if __name__ == "__main__":
             if event.type == pygame.QUIT:
                 sys.exit()
 
-            if event.type == pygame.MOUSEBUTTONDOWN:
-                marble_choice, direction = my_pygame.click_handle(event.pos)
 
-                if my_game.get_current_turn() is None:
-                    my_game.make_move(player_1[0], marble_choice, direction)
-                else:
-                    my_game.make_move(my_game.get_current_turn(), marble_choice, direction)
+        my_pygame.update_interface(my_game.get_board())
+        intro_message = message_font.render("Welcome to Albert's Kuba Game. Please exit this screen to start play.", False, (0, 0, 0))
+        my_pygame.screen.blit(intro_message, (100, 730))
+
+
 
 
         pygame.display.update()

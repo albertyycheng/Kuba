@@ -27,14 +27,15 @@ Link to rules and game overview [here](https://sites.google.com/site/boardandpie
 
 ## Run Instructions
 
-1. Clone this repository
+1. Fork and clone this repository
 2. Install the pygame module
 3. Open and run the .py file
 
 ## Demo
 
-I apologize for the quality. The gif was compressed. In the gif, two players take turns making moves. The screen is updated after each move.
+In the gif, two players take turns making moves. The screen is updated after each move.
 At the end of the gif, when a player knocks off a red marble, their on-screen scoreboard is updated.
+(EDIT: I had to compress the gif, so I apologize for the quality!)
 
 ![GIF Demo](/images/demo.gif)
 
